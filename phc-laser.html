@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光子晶体激光器设计工坊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #aaa;
+            font-size: 1.1em;
+        }
+
+        .game-area {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .design-panel {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .value-display {
+            min-width: 60px;
+            text-align: right;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        canvas {
+            width: 100%;
+            border-radius: 12px;
+            background: #000;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 25px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.1em;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+        }
+
+        .message.warning {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .message.info {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .achievement {
+            display: inline-block;
+            background: linear-gradient(135deg, #f6d365, #fda085);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .help-text {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 光子晶体激光器设计工坊</h1>
+            <div class="subtitle">设计你的专属光子晶体激光器</div>
+        </header>
+
+        <div class="game-area">
+            <!-- 状态面板 -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">⚡ 激光强度</div>
+                    <div class="stat-value" id="power">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">🎯 设计评分</div>
+                    <div class="stat-value" id="score">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">🏆 成功次数</div>
+                    <div class="stat-value" id="success">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">💎 品质因子</div>
+                    <div class="stat-value" id="quality">0</div>
+                </div>
+            </div>
+
+            <!-- 设计面板 -->
+            <div class="design-panel">
+                <div class="panel-title">📐 结构设计参数</div>
+                
+                <div class="control-group">
+                    <label class="control-label">晶格常数 (nm)</label>
+                    <div class="slider-container">
+                        <input type="range" id="lattice" min="200" max="600" value="400" step="10">
+                        <span class="value-display" id="latticeValue">400</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">空气孔半径 (nm)</label>
+                    <div class="slider-container">
+                        <input type="range" id="radius" min="50" max="250" value="150" step="5">
+                        <span class="value-display" id="radiusValue">150</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">晶体厚度 (μm)</label>
+                    <div class="slider-container">
+                        <input type="range" id="thickness" min="1" max="10" value="5" step="0.5">
+                        <span class="value-display" id="thicknessValue">5.0</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">泵浦功率 (mW)</label>
+                    <div class="slider-container">
+                        <input type="range" id="pump" min="0" max="100" value="50" step="5">
+                        <span class="value-display" id="pumpValue">50</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 可视化画布 -->
+            <canvas id="crystalCanvas" width="800" height="400"></canvas>
+
+            <!-- 操作按钮 -->
+            <div class="button-group">
+                <button class="btn-primary" onclick="simulateLaser()">🚀 启动模拟</button>
+                <button class="btn-secondary" onclick="manufacture()">⚙️ 开始制造</button>
+                <button class="btn-success" onclick="randomDesign()">🎲 随机设计</button>
+            </div>
+
+            <!-- 消息提示 -->
+            <div id="message"></div>
+
+            <!-- 成就展示 -->
+            <div id="achievements"></div>
+
+            <!-- 帮助文本 -->
+            <div class="help-text">
+                💡 <strong>游戏目标：</strong>调整参数设计出高性能的光子晶体激光器！<br>
+                🎯 <strong>最优参数：</strong>晶格常数≈400nm，空气孔半径≈晶格常数的0.35倍，泵浦功率充足<br>
+                🏅 <strong>评分标准：</strong>激光强度越高、品质因子越大，设计评分越高！
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏状态
+        let gameState = {
+            power: 0,
+            score: 0,
+            success: 0,
+            quality: 0,
+            achievements: new Set()
+        };
+
+        // 获取DOM元素
+        const canvas = document.getElementById('crystalCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 滑块监听
+        const sliders = ['lattice', 'radius', 'thickness', 'pump'];
+        sliders.forEach(id => {
+            const slider = document.getElementById(id);
+            const display = document.getElementById(id + 'Value');
+            slider.addEventListener('input', () => {
+                display.textContent = parseFloat(slider.value).toFixed(id === 'thickness' ? 1 : 0);
+                drawCrystal();
+            });
+        });
+
+        // 绘制光子晶体结构
+        function drawCrystal() {
+            const lattice = parseInt(document.getElementById('lattice').value);
+            const radius = parseInt(document.getElementById('radius').value);
+            
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 计算网格参数
+            const scale = 0.8;
+            const spacing = lattice * scale / 100;
+            const holeRadius = radius * scale / 100;
+            
+            // 绘制光子晶体周期结构
+            ctx.fillStyle = '#4169E1';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制六角晶格
+            for (let row = -2; row < 12; row++) {
+                for (let col = -2; col < 20; col++) {
+                    const x = col * spacing + (row % 2) * spacing / 2 + 50;
+                    const y = row * spacing * Math.sqrt(3) / 2 + 100;
+                    
+                    // 绘制空气孔
+                    ctx.beginPath();
+                    ctx.arc(x, y, holeRadius, 0, Math.PI * 2);
+                    ctx.fillStyle = '#000';
+                    ctx.fill();
+                    
+                    // 添加光晕效果
+                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, holeRadius);
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                }
+            }
+            
+            // 添加激光光束效果
+            if (gameState.power > 0) {
+                ctx.strokeStyle = `rgba(255, 0, 255, ${Math.min(gameState.power / 100, 1)})`;
+                ctx.lineWidth = 3;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#FF00FF';
+                
+                for (let i = 0; i < 5; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, canvas.height / 2 + i * 20 - 40);
+                    ctx.lineTo(canvas.width, canvas.height / 2 + i * 20 - 40);
+                    ctx.stroke();
+                }
+                
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // 模拟激光器性能
+        function simulateLaser() {
+            const lattice = parseInt(document.getElementById('lattice').value);
+            const radius = parseInt(document.getElementById('radius').value);
+            const thickness = parseFloat(document.getElementById('thickness').value);
+            const pump = parseInt(document.getElementById('pump').value);
+            
+            // 计算填充比
+            const fillingFactor = radius / lattice;
+            
+            // 计算品质因子（最优填充比约0.35）
+            const optimalFilling = 0.35;
+            const fillingScore = 100 * (1 - Math.abs(fillingFactor - optimalFilling) / optimalFilling);
+            
+            // 计算激光强度
+            const thicknessScore = Math.min(thickness / 5 * 50, 100);
+            const pumpScore = Math.min(pump / 50 * 50, 100);
+            
+            gameState.quality = Math.round(fillingScore);
+            gameState.power = Math.round((fillingScore + thicknessScore + pumpScore) / 3);
+            gameState.score = Math.round(gameState.power * gameState.quality / 100);
+            
+            // 更新显示
+            updateStats();
+            drawCrystal();
+            
+            // 显示结果
+            let messageType = 'info';
+            let messageText = '';
+            
+            if (gameState.power >= 80) {
+                messageType = 'success';
+                messageText = '🎉 优秀！激光器性能极佳！';
+                gameState.success++;
+                checkAchievements();
+            } else if (gameState.power >= 50) {
+                messageType = 'info';
+                messageText = '👍 不错！继续优化参数可以更好！';
+            } else {
+                messageType = 'warning';
+                messageText = '💡 提示：尝试调整填充比至0.35左右，增加泵浦功率';
+            }
+            
+            showMessage(messageText, messageType);
+        }
+
+        // 制造激光器
+        function manufacture() {
+            if (gameState.power < 30) {
+                showMessage('⚠️ 当前设计性能不足，请先进行模拟优化！', 'warning');
+                return;
+            }
+            
+            showMessage('⚙️ 制造中...', 'info');
+            
+            setTimeout(() => {
+                const quality = ['普通', '良好', '优秀', '完美'][Math.floor(gameState.power / 25)];
+                showMessage(`✅ 制造完成！品质等级：${quality}`, 'success');
+                gameState.success++;
+                checkAchievements();
+                updateStats();
+            }, 2000);
+        }
+
+        // 随机设计
+        function randomDesign() {
+            document.getElementById('lattice').value = Math.floor(Math.random() * 400 + 200);
+            document.getElementById('radius').value = Math.floor(Math.random() * 200 + 50);
+            document.getElementById('thickness').value = (Math.random() * 9 + 1).toFixed(1);
+            document.getElementById('pump').value = Math.floor(Math.random() * 100);
+            
+            sliders.forEach(id => {
+                const slider = document.getElementById(id);
+                const display = document.getElementById(id + 'Value');
+                display.textContent = parseFloat(slider.value).toFixed(id === 'thickness' ? 1 : 0);
+            });
+            
+            drawCrystal();
+            showMessage('🎲 已生成随机设计参数！', 'info');
+        }
+
+        // 更新统计数据
+        function updateStats() {
+            document.getElementById('power').textContent = gameState.power;
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('success').textContent = gameState.success;
+            document.getElementById('quality').textContent = gameState.quality;
+        }
+
+        // 显示消息
+        function showMessage(text, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.className = `message ${type}`;
+            msgDiv.textContent = text;
+            
+            setTimeout(() => {
+                msgDiv.className = '';
+                msgDiv.textContent = '';
+            }, 3000);
+        }
+
+        // 成就系统
+        function checkAchievements() {
+            const achievements = document.getElementById('achievements');
+            
+            if (gameState.success >= 1 && !gameState.achievements.has('first')) {
+                gameState.achievements.add('first');
+                const badge = document.createElement('div');
+                badge.className = 'achievement';
+                badge.textContent = '🏅 首次成功';
+                achievements.appendChild(badge);
+            }
+            
+            if (gameState.power >= 90 && !gameState.achievements.has('perfect')) {
+                gameState.achievements.add('perfect');
+                const badge = document.createElement('div');
+                badge.className = 'achievement';
+                badge.textContent = '⭐ 完美设计';
+                achievements.appendChild(badge);
+            }
+            
+            if (gameState.success >= 10 && !gameState.achievements.has('master')) {
+                gameState.achievements.add('master');
+                const badge = document.createElement('div');
+                badge.className = 'achievement';
+                badge.textContent = '👑 设计大师';
+                achievements.appendChild(badge);
+            }
+        }
+
+        // 初始化
+        drawCrystal();
+    </script>
+</body>
+</html>

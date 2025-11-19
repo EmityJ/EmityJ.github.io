@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>致邵邵</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .heart {
+            font-size: 80px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        h1 {
+            color: #e91e63;
+            font-size: 2.5em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            color: #333;
+            font-size: 1.2em;
+            line-height: 2;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            color: #e91e63;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .poem {
+            font-style: italic;
+            color: #666;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 10px;
+            line-height: 1.8;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #e91e63, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(233, 30, 99, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.6);
+        }
+
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .signature {
+            margin-top: 30px;
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-bg" id="hearts-bg"></div>
+    
+    <div class="container">
+        <div class="heart">💕</div>
+        <h1>亲爱的邵邵</h1>
+        
+        <div class="message">
+            遇见你是我最美丽的意外<br>
+            <span class="highlight">喜欢你</span>，是我做过最好的决定
+        </div>
+        
+        <div class="poem">
+            春风十里不如你<br>
+            夏日炎炎只想你<br>
+            秋叶飘零思念你<br>
+            冬雪皑皑温暖你
+        </div>
+        
+        <div class="message">
+            愿余生都是你<br>
+            愿所有的温柔都给你
+        </div>
+        
+        <button class="btn" onclick="showLove()">💖 点击接受我的心意</button>
+        
+        <div class="signature">
+            —— 永远爱你的人
+        </div>
+    </div>
+
+    <script>
+        // 创建飘落的爱心
+        function createHearts() {
+            const container = document.getElementById('hearts-bg');
+            const hearts = ['💕', '💗', '💖', '💝', '❤️', '💘'];
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 6 + 's';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        // 点击按钮效果
+        function showLove() {
+            const messages = [
+                '邵邵，我好喜欢你！💕',
+                '你是我心中最美的风景！🌸',
+                '遇见你，三生有幸！✨',
+                '愿与你共度余生！💍',
+                '你就是我的全世界！🌍'
+            ];
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            alert(randomMsg);
+            
+            // 创建更多爱心
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.innerHTML = '💖';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDuration = '3s';
+                    document.getElementById('hearts-bg').appendChild(heart);
+                }, i * 100);
+            }
+        }
+
+        // 页面加载时创建爱心
+        window.onload = createHearts;
+    </script>
+</body>
+</html>

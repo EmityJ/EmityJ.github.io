@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>致思宇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        .container {
+            text-align: center;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            max-width: 520px;
+            animation: slideIn 1.2s ease-out;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .icon {
+            font-size: 70px;
+            animation: bounce 2s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        h1 {
+            color: #00b4d8;
+            font-size: 2.8em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #00b4d8, #0096c7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .name {
+            font-size: 1.5em;
+            color: #0077b6;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            color: #333;
+            font-size: 1.15em;
+            line-height: 2.2;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            color: #0096c7;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .poem-box {
+            margin: 25px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            border-radius: 15px;
+            border-left: 4px solid #00b4d8;
+        }
+
+        .poem {
+            font-style: italic;
+            color: #006d77;
+            line-height: 2;
+            font-size: 1.1em;
+        }
+
+        .love-words {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .love-words p {
+            color: #e65100;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .btn-group {
+            margin-top: 25px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00b4d8, #0096c7);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 180, 216, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 180, 216, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.6);
+        }
+
+        .signature {
+            margin-top: 30px;
+            color: #90a4ae;
+            font-size: 0.95em;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 180, 216, 0.1);
+            animation: bubbleFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes bubbleFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+
+        .countdown {
+            font-size: 0.9em;
+            color: #78909c;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="icon">🌟</div>
+        <h1>思宇</h1>
+        <div class="name">我心中最亮的那颗星</div>
+        
+        <div class="message">
+            茫茫人海中遇见你<br>
+            是我这辈子最大的<span class="highlight">幸运</span>
+        </div>
+        
+        <div class="poem-box">
+            <div class="poem">
+                思念如潮涌心间<br>
+                宇宙浩瀚唯你眷<br>
+                愿化星辰守护你<br>
+                此情不渝到永远
+            </div>
+        </div>
+        
+        <div class="love-words">
+            <p>
+                你的名字是我见过最美的情诗<br>
+                <strong>思</strong>念成疾，<strong>宇</strong>你相遇
+            </p>
+        </div>
+        
+        <div class="message">
+            想牵着你的手<br>
+            走过春夏秋冬<br>
+            看尽世间繁华
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn" onclick="showMessage()">💫 接受我的真心</button>
+            <button class="btn btn-secondary" onclick="showHeart()">💕 查看隐藏惊喜</button>
+        </div>
+        
+        <div class="signature">
+            —— 最想和你在一起的人
+        </div>
+        
+        <div class="countdown" id="countdown"></div>
+    </div>
+
+    <script>
+        // 创建星星背景
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // 显示甜蜜消息
+        function showMessage() {
+            const messages = [
+                '思宇，我真的好喜欢你！💙',
+                '你是我生命中最美的意外！✨',
+                '愿与你携手，共度余生！💍',
+                '你的笑容是我最大的动力！😊',
+                '遇见你，此生无憾！🌟'
+            ];
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            alert(randomMsg);
+            createFireworks();
+        }
+
+        // 显示隐藏惊喜
+        function showHeart() {
+            const surprise = `
+💝 给思宇的情书 💝
+
+亲爱的思宇：
+
+    从遇见你的那一刻起，
+    我的世界就多了一抹色彩。
+    
+    你的笑容像阳光，
+    温暖了我每一个日子。
+    
+    我想成为你的依靠，
+    陪你看日出日落，
+    伴你走过四季轮回。
+    
+    如果可以，
+    我愿用一生的时间，
+    来证明我有多爱你。
+
+                    永远爱你的人
+            `;
+            alert(surprise);
+        }
+
+        // 创建烟花效果
+        function createFireworks() {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.width = '6px';
+                    star.style.height = '6px';
+                    star.style.background = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3'][Math.floor(Math.random() * 4)];
+                    star.style.animationDuration = '0.5s';
+                    document.getElementById('stars').appendChild(star);
+                    
+                    setTimeout(() => star.remove(), 1000);
+                }, i * 50);
+            }
+        }
+
+        // 显示相遇天数
+        function showCountdown() {
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('zh-CN', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('countdown').innerHTML = `📅 ${dateStr} · 愿每一天都有你`;
+        }
+
+        // 页面加载
+        window.onload = function() {
+            createStars();
+            showCountdown();
+        };
+    </script>
+</body>
+</html>
